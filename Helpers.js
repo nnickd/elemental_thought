@@ -31,7 +31,6 @@ function polyception(x, y, nlevels, ops) {
     let forceDist = ops.forceDist[i] || ops.forceDist;
     let gravity = ops.gravity[i] || ops.gravity;
 
-    
     let _p = pmap[i - 1];
     let npmax = i > 0 ? _p.length : 1;
     for (let np = 0; np < npmax; np++) {
@@ -53,7 +52,6 @@ function polyception(x, y, nlevels, ops) {
         points.push(p);
       }
     }
-    
   }
 
   console.log(points, points.length);
@@ -61,9 +59,11 @@ function polyception(x, y, nlevels, ops) {
 }
 
 function* pairs(points) {
- for (let i = 0; i < points.length; i++) {
-      for (let j = i; j < points.length; j++) {
-          yield [points[i], points[j]];
+  for (let i = 0; i < points.length; i++) {
+    for (let j = i; j < points.length; j++) {
+      if (i !== j) {
+        yield [points[i], points[j]];
       }
-    } 
+    }
+  }
 }

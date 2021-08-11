@@ -2,7 +2,7 @@ let points = [];
 let enterToggle = true;
 let shiftToggle = false;
 let upToggle = true;
-let leftToggle = true;
+let leftToggle = false;
 let rightToggle = true;
 let downToggle = false;
 
@@ -17,21 +17,25 @@ function draw() {
   for (let pair of pairs(points)) {
     let p = pair[0];
     let p2 = pair[1];
-    if (p.idx != p2.idx) {
-      Gravity(p, p2);
-      PointLine(p, p2);
+    Gravity(p, p2, leftToggle);
+    PointLine(p, p2);
 
-      if (downToggle && !p.kill && !p2.kill) {
-        let dist = p5.Vector.dist(p.pos, p2.pos);
-        if (dist < (p.radius + p2.radius) / 4) {
-          p2.kill = true;
-        }
+    if (downToggle && !p.kill && !p2.kill) {
+      let dist = p5.Vector.dist(p.pos, p2.pos);
+      if (dist < (p.radius + p2.radius) / 4) {
+        p2.kill = true;
+        p.mass += p2.mass;
+        p.color = (p.mass / 100) % 255;
       }
     }
   }
 
   if (downToggle) {
     points = points.filter((x) => !x.kill);
+
+    if (frameCount % 100 == 0) {
+      console.log(points.length);
+    }
   }
 
   for (let point of points) {
@@ -69,29 +73,49 @@ function mousePressed() {
   let mx = mouseX - width / 2;
   let my = mouseY - height / 2;
 
+  let _npoints = 4;
+  let _radius = 190;
+  let _angle = TWO_PI / _npoints / 3;
+  let minDist = p5.Vector.dist(
+    createVector(cos(_angle) * _radius, sin(_angle) * _radius),
+    createVector(cos(_angle * 2) * _radius, sin(_angle * 2) * _radius)
+  );
+  let _levels = 2;
+  let _colors = [];
+  let _radiuses = [];
+  let __npoints = [];
+  for (let i = 0; i < _levels; i++) {
+    _colors.push(((66 * i) % 255) + 66);
+    _radiuses.push(_radiuses[i - 1] ? _radiuses[i - 1] / 3 : _radius);
+    __npoints.push(
+      Math.ceil(__npoints[i - 1] ? (__npoints[i - 1] / 2) % 6 : _npoints)
+    );
+  }
+  __npoints = null;
+
+  console.log(_colors, _radiuses, __npoints);
+
   let six = new PolyOps(
-    (npoints = [6, 6]),
-    (radius = [160, 80]),
-    (pradius = 10),
-    (mass = [1000, 10]),
-    (limit = 100),
-    (_color = 66),
-    (lineDist = 90),
-    (forceDist = 90),
+    (npoints = __npoints || _npoints),
+    (radius = _radiuses || _radius),
+    (pradius = 7),
+    (mass = 66666),
+    (limit = 40),
+    (_color = _colors),
+    (lineDist = minDist + 3),
+    (forceDist = minDist + 3),
     (gravity = 0.01)
   );
 
-  let _points = polyception(upToggle ? mx : 0, upToggle ? my : 0, 1, six);
+  let _points = polyception(upToggle ? mx : 0, upToggle ? my : 0, _levels, six);
 
   for (let pair of pairs(_points)) {
     let p = pair[0];
     let p2 = pair[1];
-    if (p.idx != p2.idx) {
-      if (!p.kill && !p2.kill) {
-        let dist = p5.Vector.dist(p.pos, p2.pos);
-        if (dist < (p.radius + p2.radius) / 4) {
-          p2.kill = true;
-        }
+    if (!p.kill && !p2.kill) {
+      let dist = p5.Vector.dist(p.pos, p2.pos);
+      if (dist < (p.radius + p2.radius) / 4) {
+        p2.kill = true;
       }
     }
   }

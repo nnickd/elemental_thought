@@ -1,8 +1,11 @@
-function Gravity(p, p2) {
+function Gravity(p, p2, alsoOpposite = false) {
   let target = p2.pos.copy().sub(p.pos);
   let dist = target.mag();
 
-  if (dist <= (p.forceDist + p2.forceDist) / 2 && dist > (p.radius + p2.radius / 4)) {
+  if (
+    dist <= (p.forceDist + p2.forceDist) / 2 &&
+    dist > p.radius + p2.radius / 4
+  ) {
     target.normalize();
     let gravity = (p.gravity + p2.gravity) / 2;
     let force = (gravity * p.mass * p2.mass) / (dist * dist);
@@ -10,6 +13,14 @@ function Gravity(p, p2) {
     p.force(target);
     target.mult(-1);
     p2.force(target);
+  } else if (alsoOpposite) {
+    target.normalize();
+    let gravity = (p.gravity + p2.gravity) / 2;
+    let force = (gravity * p.mass * p2.mass) / (dist * dist);
+    target.mult(force);
+    p2.force(target);
+    target.mult(-1);
+    p.force(target);
   }
 }
 
@@ -19,7 +30,7 @@ function PointLine(p, p2) {
   if (dist <= (p.lineDist + p2.lineDist) / 2) {
     push();
     translate(width / 2, height / 2);
-    stroke(98)
+    stroke(98);
     line(
       p.pos.x + p.vel.x,
       p.pos.y + p.vel.y,
