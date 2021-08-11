@@ -21,13 +21,11 @@ function setup() {
 function draw() {
   background(180);
 
-  // for (let points of groups) {
     
-    for (let i = 0; i < points.length; i++) {
-      for (let j = i; j < points.length; j++) {
-        if (i != j) {
-          let p = points[i];
-          let p2 = points[j];
+    for (let pair of pairs(points)) {
+      let p = pair[0];
+      let p2 = pair[1];
+      if (p.idx != p2.idx) {
           Gravity(p, p2);
           PointLine(p, p2);
           
@@ -37,10 +35,7 @@ function draw() {
               p2.kill = true;
             }
           }
-        
-
         }
-      }
     }
     
     if (downToggle) {
@@ -98,35 +93,35 @@ function mousePressed() {
     (gravity = .01)
   );
   
-  //let _points = polyception(upToggle ? mx : 0, upToggle ? my : 0, 2, six);
+  let _points = polyception(upToggle ? mx : 0, upToggle ? my : 0, 2, six);
   
-  let three = new PolyOps(
-    (npoints = 6),
-    (radius =  90),
-    (pradius = 10),  
-    (mass = 10000),
-    (limit = 5),
-    (_color = [66, 127, 166]),
-    (lineDist = 100),
-    (forceDist = 100),
-    (gravity = .01)
-  );
+  //let three = new PolyOps(
+  //  (npoints = 6),
+  //  (radius =  90),
+  //  (pradius = 10),  
+  //  (mass = 10000),
+  //  (limit = 5),
+  //  (_color = [66, 127, 166]),
+  //  (lineDist = 100),
+  //  (forceDist = 100),
+  //  (gravity = .01)
+  //);
 
   //let _points = polyception(upToggle ? mx : 0, upToggle ? my : 0, 3, three);
   
-  let four = new PolyOps(
-    (npoints = 3),
-    (radius =  80),
-    (pradius = 30  ),  
-    (mass = 1000),
-    (limit = 300),
-    (_color = 66),
-    (lineDist = 90),
-    (forceDist = 90),
-    (gravity = .01)
-  );
+  //let four = new PolyOps(
+  //  (npoints = 3),
+  //  (radius =  80),
+  //  (pradius = 30  ),  
+  //  (mass = 1000),
+  //  (limit = 300),
+  //  (_color = 66),
+  //  (lineDist = 90),
+  //  (forceDist = 90),
+  //  (gravity = .01)
+  //);
 
-  let _points = polyception(upToggle ? mx : 0, upToggle ? my : 0,9, four);
+  //let _points = polyception(upToggle ? mx : 0, upToggle ? my : 0,9, four);
   
   
   

@@ -1,4 +1,8 @@
-function Point(
+let PointIDX = 0;
+
+class Point {
+ 
+  constructor(
   x,
   y,
   radius,
@@ -9,6 +13,7 @@ function Point(
   forceDist,
   gravity
 ) {
+  this.idx = PointIDX++;
   this.pos = createVector(x, y);
   this.vel = createVector(0, 0);
   this.acc = createVector(0, 0);
@@ -23,7 +28,7 @@ function Point(
   this.kill = false;
 }
 
-Point.prototype.tick = function (toroidial = false) {
+tick (toroidial = false) {
   this.vel.add(this.acc);
   this.vel.limit(this.limit);
   this.pos.add(this.vel);
@@ -60,16 +65,18 @@ Point.prototype.tick = function (toroidial = false) {
       this.pos.y = height / 2 - this.radius;
     }
   }
-};
+}
 
-Point.prototype.draw = function () {
+draw  () {
   push();
   translate(width / 2, height / 2);
   fill(this.color);
   ellipse(this.pos.x, this.pos.y, this.radius, this.radius);
   pop();
-};
+}
 
-Point.prototype.force = function (force) {
+force (force) {
   this.acc.add(force.copy().div(this.mass));
-};
+}
+  
+}

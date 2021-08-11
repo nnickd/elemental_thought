@@ -59,3 +59,11 @@ function polyception(x, y, nlevels, ops) {
   console.log(points, points.length);
   return points;
 }
+
+function* pairs(points) {
+ for (let i = 0; i < points.length; i++) {
+      for (let j = i; j < points.length; j++) {
+          yield [points[i], points[j]];
+      }
+    } 
+}
